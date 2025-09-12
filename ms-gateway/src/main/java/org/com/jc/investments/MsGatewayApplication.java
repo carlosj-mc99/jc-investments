@@ -2,11 +2,7 @@ package org.com.jc.investments;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
-import org.springframework.cloud.openfeign.FeignClient;
 
-@FeignClient
-@EnableEurekaServer
 @SpringBootApplication
 public class MsGatewayApplication {
 
