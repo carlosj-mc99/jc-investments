@@ -2,8 +2,8 @@ spring:
   cloud:
     gateway:
       server:
-        webflux:
-          routes:
+          webmvc:
+            routes:
             - id: ms-company
               uri: lb://ms-company
               predicates:
