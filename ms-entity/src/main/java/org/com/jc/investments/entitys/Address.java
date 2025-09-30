@@ -10,7 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,28 +20,35 @@ import lombok.Setter;
 @Setter
 @Entity
 @Builder
-@Table(name="company")
-public class Company {
+@Table(name="address")
+public class Address {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_company")
-	private Integer idCompany;
+	@Column(name = "id_address")
+	private Integer idAddress;
 	
-	@Column(name = "name", length = 55)
-	private String name;
+	@Column(name = "street", length = 255)
+	private String street;
 	
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_address",nullable = false,foreignKey = @ForeignKey(name = "FK_COMPANY_ADDRESS"))
-	private Address address;
+	@Column(name = "internal_number", length = 30)
+	private String internalNumber;
 	
-	@Column(name = "phone", length = 15)
-	private Integer phone;
+	@Column(name = "external_number", length = 30)
+	private String externalNumber;
 	
-	@Column(name = "email",length = 55)
-	private String email;
-	
+	@Column(name = "suburb", length = 255)
+	private String suburb;
+
 	@Column(name = "enabled")
 	@ColumnDefault(value = "false")
 	private boolean enabled;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_state",nullable = false,foreignKey = @ForeignKey(name="FK_ADDRESS_STATE"))
+	private State state;
+	
+	@Column(name = "postal_code", length = 30)
+	private String postalCode;
+	
 }

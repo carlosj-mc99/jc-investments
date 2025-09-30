@@ -10,7 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,28 +20,23 @@ import lombok.Setter;
 @Setter
 @Entity
 @Builder
-@Table(name="company")
-public class Company {
+@Table(name="state")
+public class State {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id_company")
-	private Integer idCompany;
+	@Column(name = "id_state")
+	private Integer idState;
 	
 	@Column(name = "name", length = 55)
 	private String name;
 	
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_address",nullable = false,foreignKey = @ForeignKey(name = "FK_COMPANY_ADDRESS"))
-	private Address address;
-	
-	@Column(name = "phone", length = 15)
-	private Integer phone;
-	
-	@Column(name = "email",length = 55)
-	private String email;
-	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_city",nullable = false,foreignKey = @ForeignKey(name="FK_STATE_CITY"))
+	private City city;
+
 	@Column(name = "enabled")
 	@ColumnDefault(value = "false")
 	private boolean enabled;
+	
 }
