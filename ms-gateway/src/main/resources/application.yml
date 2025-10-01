@@ -7,24 +7,30 @@ spring:
             - id: ms-company
               uri: lb://ms-company
               predicates:
-              - path=/api/company/**
+              - path=/api/v0/company/**
               filters:
-              - StripPrefix=2
+              - StripPrefix=3
             - id: ms-documents
               uri: lb://ms-documents
               predicates:
-              - path=/api/documents/**
+              - path=/api/v0/documents/**
               filters:
-              - StripPrefix=2
+              - StripPrefix=3
             - id: ms-user
               uri: lb://ms-user
               predicates:
-              - path=/api/user/**
+              - path=/api/v0/user/**
               filters:
-              - StripPrefix=2
+              - StripPrefix=3
             - id: ms-transactions
               uri: lb://ms-transactions
               predicates:
-              - path=/api/transactions/**
+              - path=/api/v0/transactions/**
               filters:
-              - StripPrefix=2
+              - StripPrefix=3
+            - id: ms-catalog
+              uri: lb://ms-catalog
+              predicates:
+              - path=/api/v0/catalog/**
+              filters:
+              - StripPrefix=3
