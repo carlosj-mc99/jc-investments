@@ -2,12 +2,13 @@ package org.com.jc.investments.controller;
 
 import java.util.List;
 
+import org.com.jc.investments.configuration.HttpResponseInvestment;
+import org.com.jc.investments.configuration.HttpStatusCodeInvestment;
 import org.com.jc.investments.dtos.CityDto;
 import org.com.jc.investments.entitys.City;
 import org.com.jc.investments.service.ICityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,37 +29,61 @@ public class CityController {
 	private final ModelMapper mapper;
 
 	@PostMapping("/")
-	private ResponseEntity<CityDto> create(@RequestBody CityDto dto){
+	private HttpResponseInvestment<CityDto> create(@RequestBody CityDto dto){
 		
 		City createCity= icityService.create(dto);
 		
-		return new ResponseEntity<CityDto>(convertToDto(createCity),HttpStatus.CREATED);
+		return new HttpResponseInvestment<CityDto>( HttpStatusCodeInvestment.CREATED.getCode(),
+				HttpStatus.CREATED,convertToDto(createCity));
 	}
 	
 	@GetMapping("/")
-	private ResponseEntity<List<CityDto>> getAll(){
+	private HttpResponseInvestment<List<CityDto>> getAll(){
 		
-		return new ResponseEntity<List<CityDto>>(icityService.getAll().stream().map(this::convertToDto).toList(),HttpStatus.ACCEPTED);
+		return new HttpResponseInvestment<List<CityDto>>(HttpStatusCodeInvestment.OK.getCode(),HttpStatus.ACCEPTED
+				,icityService.getAll().stream().map(this::convertToDto).toList());
 	}
 
 	@GetMapping("/{id}")
-	private ResponseEntity<CityDto> getById(@PathVariable Integer id){
+	private HttpResponseInvestment<CityDto> getById(@PathVariable Integer id){
 		
-		return new ResponseEntity<CityDto>(convertToDto(icityService.getById(id)),HttpStatus.ACCEPTED);
+		City getCity=icityService.getById(id);
+		
+		if(getCity != null) {
+			
+			return new HttpResponseInvestment<CityDto>(HttpStatusCodeInvestment.OK.getCode(),HttpStatus.ACCEPTED
+					,convertToDto(getCity));
+		}else {
+			return new HttpResponseInvestment<CityDto>(HttpStatusCodeInvestment.NOT_FOUND.getCode(),HttpStatus.NOT_FOUND
+					,null);
+			
+		}
+		
 	}
 
 	@PutMapping("/{id}")
-	private ResponseEntity<CityDto> update(@PathVariable Integer id,@RequestBody CityDto dto){
+	private HttpResponseInvestment<CityDto> update(@PathVariable Integer id,@RequestBody CityDto dto){
 		
-		return new ResponseEntity<CityDto>(convertToDto(icityService.actualizar(id, dto)),HttpStatus.ACCEPTED);
+		
+		City getCity=icityService.actualizar(id, dto);
+		
+		if(getCity != null) {
+			
+			return new HttpResponseInvestment<CityDto>(HttpStatusCodeInvestment.OK.getCode(),HttpStatus.ACCEPTED
+					,convertToDto(getCity));
+		}else {
+			return new HttpResponseInvestment<CityDto>(HttpStatusCodeInvestment.NOT_FOUND.getCode(),HttpStatus.NOT_FOUND, null);
+			
+		}
 	}
 	
 	@DeleteMapping("/{id}")
-	private ResponseEntity<String> delete(@PathVariable Integer id){
+	private HttpResponseInvestment<String> delete(@PathVariable Integer id){
 		
 		icityService.eliminar(id);
 		
-		return new ResponseEntity<String>("Se elimino correctamente...",HttpStatus.NO_CONTENT);
+		return new HttpResponseInvestment<String>(HttpStatusCodeInvestment.NO_CONTENT.getCode()
+				,HttpStatus.NO_CONTENT,"Se elimino correctamente...");
 	}
 	
 	private CityDto convertToDto(City city) {

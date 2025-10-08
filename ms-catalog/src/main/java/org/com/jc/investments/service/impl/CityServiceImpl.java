@@ -30,7 +30,7 @@ public class CityServiceImpl implements ICityService{
 
 	@Override
 	public City getById(Integer idCity) {
-		return repo.findById(idCity).orElse(new City());
+		return repo.findById(idCity).orElse(null);
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class CityServiceImpl implements ICityService{
 		City city = repo.findById(idCity).orElse(null);
 		
 		if(city == null) {
-			return new City();
+			return city;
 		}
 		
 		city.setEnabled(dto.isEnabled());
